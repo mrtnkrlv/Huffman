@@ -20,8 +20,9 @@ linkedList create_linkedList(){
     return rep;
 }
 
-linkedList head_linkedList(linkedList l){
-    return l.head
+void insert_linkedList(linkedList l, node n, char* s){
+    node 
+
 }
 
 int main(){
