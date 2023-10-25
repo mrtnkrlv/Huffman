@@ -45,8 +45,6 @@ void insert_linkedList(linkedList l, node n){
     p->succ = &n; 
 }
 
-
-
 //traverse linked list and print elements
 void print_linkedList(linkedList l){
     node* p = l.head;
@@ -56,18 +54,9 @@ void print_linkedList(linkedList l){
     }
 }
 
-int main(){
-    //for tests
-    /*node n3 = {.symbol = "c", .weight = 4, .succ = NULL};
-    node n2 = {.symbol = "b", .weight = 3, .succ = &n3};
-    node n1 = {.symbol = "a", .weight = 2, .succ = &n2};
-    linkedList l = {.head = &n1};
-
-    node n = {.symbol = "d", .weight = 8, .succ = NULL};
-    insert_linkedList(l, n);
-    print_linkedList(l);*/    
+/*int main(){
  
 
     //exit for now so that I don't have to worry about freeing
     exit(0);
-}
+}*/
