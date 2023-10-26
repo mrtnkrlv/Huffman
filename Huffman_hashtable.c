@@ -23,17 +23,47 @@ int hashFunction(char* s, int capacity){
 
 //hashtable creation
 hashTable creation_hashTable(int capacity){
-    hashTable rep = {.cells = NULL, .capacity = capacity};
+    linkedList* cells = malloc(sizeof(linkedList)*capacity);
+    linkedList base = {.head = NULL};
+    for (int i = 0; i < capacity; ++i){
+        cells[i] = base; 
+    }
+    hashTable rep = {.cells = cells, .capacity = capacity};
     return rep;
 }
 
+//need function to test if a key isn't already in hashtable 
+
 //hashtable insertion
 void insertion_hashTable(hashTable h, char* s, int n){
-    node ins = {.symbol = s, .weight = 0, .succ = NULL};
-    insert_linkedList(h.cells[hashFunction(s, h.capacity)], ins);
+    node ins = {.symbol = s, .weight = n, .succ = NULL};
+    insertion_linkedList(&h.cells[hashFunction(s, h.capacity)], ins);
 }
 
+/*void insertion_linkedList(linkedList* l, node n){
+    node** p = &l->head; //double pointer for hashtable insertion function
+    if (*p == NULL){
+        *p = &n;
+    }
+    else{
+        while ((*p)->succ != NULL){
+            *p = (*p)->succ;
+        }
+    }
+    (*p)->succ = &n;
+}*/
+
+//need modify value function
+
 int main(){
+    int cap = 100;
+    hashTable h = creation_hashTable(cap);
+
+    insertion_hashTable(h,"b",4);
+    //insertion_hashTable(h,"a",1);
+    insertion_hashTable(h, "c", 2);
+
+    printf("%s\n", h.cells[hashFunction("b",h.capacity)].head->symbol);
 
     exit(0);
 }
