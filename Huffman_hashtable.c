@@ -63,8 +63,8 @@ void increment_hashTable(hashTable h, char* s){
     ++mod->weight;
 }
 
-int main(){
-    
+/*int main(){
 
+    //exit for now so that I don't have to worry about freeing
     exit(0);
-}
+}*/
