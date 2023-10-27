@@ -40,30 +40,17 @@ void insertion_hashTable(hashTable h, char* s, int n){
     insertion_linkedList(&h.cells[hashFunction(s, h.capacity)], ins);
 }
 
-/*void insertion_linkedList(linkedList* l, node n){
-    node** p = &l->head; //double pointer for hashtable insertion function
-    if (*p == NULL){
-        *p = &n;
-    }
-    else{
-        while ((*p)->succ != NULL){
-            *p = (*p)->succ;
-        }
-    }
-    (*p)->succ = &n;
-}*/
-
 //need modify value function
 
 int main(){
-    int cap = 100;
+    /*int cap = 100;
     hashTable h = creation_hashTable(cap);
 
     insertion_hashTable(h,"b",4);
-    //insertion_hashTable(h,"a",1);
+    insertion_hashTable(h,"a",1);
     insertion_hashTable(h, "c", 2);
 
-    printf("%s\n", h.cells[hashFunction("b",h.capacity)].head->symbol);
+    printf("%s\n", h.cells[hashFunction("a",h.capacity)].head->symbol);*/
 
     exit(0);
 }

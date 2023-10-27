@@ -34,18 +34,17 @@ bool search_linkedList(linkedList l, char* s){
 }
 
 //inserts to the back of a linked list
-void insertion_linkedList(linkedList* l, node n){
-    node** p = &l->head; //double pointer for hashtable insertion function
-    if (*p == NULL){
-        *p = &n;
+void insertion_linkedList(linkedList *l, node n){                                                                                  
+    node *new = malloc(sizeof(node));
+    *new = n;
+    if (l->head == NULL)
+        l->head = new;
+    else{                             
+        node *current = l->head;                                                  
+        while (current->succ)                 
+            current = current->succ;                                                                                
+        current->succ = new;
     }
-    else{
-        while ((*p)->succ != NULL){
-            *p = (*p)->succ;
-        }
-    }
-    (*p)->succ = &n;
-    return;
 }
 
 //traverse linked list and print elements
@@ -58,7 +57,6 @@ void print_linkedList(linkedList l){
 }
 
 /*int main(){
- 
 
     //exit for now so that I don't have to worry about freeing
     exit(0);
