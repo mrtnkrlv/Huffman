@@ -3,6 +3,9 @@
 #include <string.h>
 #include <stdbool.h>
 #include <assert.h>
+#include "Huffman_linked_list.c"
+#include "Huffman_hashtable.c"
+
 
 
 
