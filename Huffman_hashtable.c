@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include <assert.h>
 #include "Huffman_linked_list.c"
 
 //hashtable 
@@ -12,7 +13,7 @@ struct hashTable{
 typedef struct hashTable hashTable;
 
 //hash function
-//good enough for now
+//(good enough)
 int hashFunction(char* s, int capacity){
     size_t rep = s[0];
     for (size_t i = 0; i < strlen(s); ++i){
@@ -32,25 +33,38 @@ hashTable creation_hashTable(int capacity){
     return rep;
 }
 
-//need function to test if a key isn't already in hashtable 
-
-//hashtable insertion
-void insertion_hashTable(hashTable h, char* s, int n){
-    node ins = {.symbol = s, .weight = n, .succ = NULL};
-    insertion_linkedList(&h.cells[hashFunction(s, h.capacity)], ins);
+//tests if a character is in a hashtable 
+bool presence_test_hashTable(hashTable h, char* s){
+    node* test = h.cells[hashFunction(s,h.capacity)].head;
+    while (test != NULL){
+        if (!strcmp(s,test->symbol))
+            return true;
+        test = test->succ;
+    }
+    return false;
 }
 
-//need modify value function
+//hashtable insertion
+//(inserts 0 as default value, which can be incremented with the next function)
+void insertion_hashTable(hashTable h, char* s){
+    assert(!presence_test_hashTable(h,s));
+    node ins =  {.symbol = s, .weight = 0, .succ = NULL};
+    insertion_linkedList(&h.cells[hashFunction(s,h.capacity)], ins);
+}
+
+//increments value at key s: no need for a value modification function
+//because I'll only change values that I don't know about when making heaps
+void increment_hashTable(hashTable h, char* s){
+    assert(presence_test_hashTable(h,s));
+    node* mod = h.cells[hashFunction(s,h.capacity)].head;
+    while(strcmp(s,mod->symbol))
+        mod = mod->succ;
+    int* temp = malloc(sizeof(int));
+    ++mod->weight;
+}
 
 int main(){
-    /*int cap = 100;
-    hashTable h = creation_hashTable(cap);
-
-    insertion_hashTable(h,"b",4);
-    insertion_hashTable(h,"a",1);
-    insertion_hashTable(h, "c", 2);
-
-    printf("%s\n", h.cells[hashFunction("a",h.capacity)].head->symbol);*/
+    
 
     exit(0);
 }
