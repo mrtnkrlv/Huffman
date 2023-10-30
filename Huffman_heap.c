@@ -18,7 +18,7 @@ typedef struct basicTree basicTree;
 struct huffmanHeap{
     char* heapSymbol;
     int heapWeight;
-    struct huffmanHeap* heapNode;
+    struct basicTree* heapTree;
     struct huffmanHeap* heapLeft;
     struct huffmanHeap* heapRight;
 };

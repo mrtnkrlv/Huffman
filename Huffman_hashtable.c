@@ -29,8 +29,10 @@ hashTable creation_hashTable(int capacity){
     for (int i = 0; i < capacity; ++i){
         cells[i] = base; 
     }
-    hashTable ans = {.cells = cells, .capacity = capacity};
-    return ans;
+    hashTable temp = {.cells = cells, .capacity = capacity};
+    hashTable* ans = malloc(sizeof(hashTable));
+    *ans = temp;
+    return *ans;
 }
 
 //tests if a character is in a hashtable 
@@ -46,20 +48,17 @@ bool presence_test_hashTable(hashTable h, char* s){
 
 //hashtable insertion
 //(inserts 0 as default value, which can be incremented with the next function)
-void insertion_hashTable(hashTable h, char* s){
-    if (!presence_test_hashTable(h,s)){ //don't raise error for Huffman_main 
-    char* temp = malloc(sizeof(s));
-    temp = s;
-    node ins =  {.symbol = temp, .weight = 0, .succ = NULL};
-    insertion_linkedList(&h.cells[hashFunction(s,h.capacity)], ins);
-    }
+void insertion_hashTable(hashTable* h, char* s){
+    assert(!presence_test_hashTable(*h,s));
+    node ins =  {.symbol = s, .weight = 0, .succ = NULL};
+    insertion_linkedList(&h->cells[hashFunction(s,h->capacity)], ins);
 }
 
 //increments value at key s: no need for a value modification function
 //because I'll only change values that I don't know about when making heaps
-void increment_hashTable(hashTable h, char* s){
-    assert(presence_test_hashTable(h,s));
-    node* mod = h.cells[hashFunction(s,h.capacity)].head;
+void increment_hashTable(hashTable* h, char* s){
+    assert(presence_test_hashTable(*h,s));
+    node* mod = h->cells[hashFunction(s,h->capacity)].head;
     while(strcmp(s,mod->symbol))
         mod = mod->succ;
     int* temp = malloc(sizeof(int));

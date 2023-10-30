@@ -18,9 +18,9 @@ int fileLength(char* fileName){
         printf("File not found\n");
         return -1;
     }
-    while(!feof(p)){
+    while (fgetc(p) != EOF){
+        if (feof(p)) break;
         ++acc;
-        fgetc(p);
     }
     return acc;
 }
@@ -29,29 +29,23 @@ int fileLength(char* fileName){
 
 hashTable readFile(char* fileName){
     FILE* p = fopen(fileName, "r");
-    assert(p != NULL); //good enough for now
+    assert(p != NULL); 
     hashTable* h = malloc(sizeof(hashTable));
     *h = creation_hashTable(fileLength(fileName));
-    char* current = malloc(2);
-    current[1] = '\0';
-    while (!feof(p)){
-        current[0] = (char) fgetc(p);
-        printf("%c", current[0]);
-        insertion_hashTable(*h, current);
-        increment_hashTable(*h, current);
+    int c;
+    while ((c = fgetc(p)) != EOF){ // fix 
+        if (feof(p)) break;
+        char* current = malloc(2);
+        current[0] = c;
+        current[1] = 0;
+        if (!presence_test_hashTable(*h,current))
+            insertion_hashTable(h,current);
+        increment_hashTable(h,current);
     }
     fclose(p);
 
     return *h;
 }
-
-/*void insertion_hashTable(hashTable h, char* s){
-    if (!presence_test_hashTable(h,s)){ //don't raise error for Huffman_main 
-    node ins =  {.symbol = s, .weight = 0, .succ = NULL};
-    insertion_linkedList(&h.cells[hashFunction(s,h.capacity)], ins);
-    }
-}*/
-
 
 /*
 
@@ -65,25 +59,23 @@ basicTree create_HuffmanTree(huffmanHeap heap){
 //left: read a 1, right: read a 0
 FILE* HuffmanCompress(basicTree tree){
 
-}
+}*/
 
 // NEXT UP: decompression
 
-*/
-
 int main(){
-    /*
+    /*int sum = 0;
     hashTable h = readFile("li_def.txt");
-    printf("\n");
     for (int i = 0; i < h.capacity; ++i){
-        if (h.cells[i].head != NULL)
-            printf("%s %i\n", h.cells[i].head->symbol, h.cells[i].head->weight);
+        node* p = h.cells[i].head;
+        while (p){
+            sum+=p->weight;
+            printf("%s %i\n", p->symbol, p->weight);
+            p = p->succ;
+        }
     }
-    */
-    
-    /*int acc = 0;
-    for (int i = 0; i < h.capacity; ++i) ++acc;
-    printf("acc %i\n", acc);*/
+    printf("%i", sum);*/
 
     exit(0);
 }
+

@@ -19,7 +19,7 @@ struct linkedList{
 typedef struct linkedList linkedList;
 
 //linked list creation
-linkedList create_linkedList(){
+linkedList creation_linkedList(){
     linkedList ans = {.head = NULL};
     return ans;
 }
