@@ -12,14 +12,14 @@ struct hashTable{
 };
 typedef struct hashTable hashTable;
 
-//hash function
+//hash function 
 //(good enough)
 int hashFunction(char* s, int capacity){
-    size_t rep = s[0];
+    size_t val = s[0];
     for (size_t i = 0; i < strlen(s); ++i){
-        rep = (24593*rep*rep+s[i] + 49157) % 6151;
+        val = (24593*val*val+s[i] + 49157) % 6151;
     }
-    return (int) rep%capacity;
+    return (int) val%capacity;
 }
 
 //hashtable creation
@@ -29,8 +29,8 @@ hashTable creation_hashTable(int capacity){
     for (int i = 0; i < capacity; ++i){
         cells[i] = base; 
     }
-    hashTable rep = {.cells = cells, .capacity = capacity};
-    return rep;
+    hashTable ans = {.cells = cells, .capacity = capacity};
+    return ans;
 }
 
 //tests if a character is in a hashtable 
@@ -47,9 +47,12 @@ bool presence_test_hashTable(hashTable h, char* s){
 //hashtable insertion
 //(inserts 0 as default value, which can be incremented with the next function)
 void insertion_hashTable(hashTable h, char* s){
-    assert(!presence_test_hashTable(h,s));
-    node ins =  {.symbol = s, .weight = 0, .succ = NULL};
+    if (!presence_test_hashTable(h,s)){ //don't raise error for Huffman_main 
+    char* temp = malloc(sizeof(s));
+    temp = s;
+    node ins =  {.symbol = temp, .weight = 0, .succ = NULL};
     insertion_linkedList(&h.cells[hashFunction(s,h.capacity)], ins);
+    }
 }
 
 //increments value at key s: no need for a value modification function

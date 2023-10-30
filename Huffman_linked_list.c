@@ -20,8 +20,8 @@ typedef struct linkedList linkedList;
 
 //linked list creation
 linkedList create_linkedList(){
-    linkedList rep = {.head = NULL};
-    return rep;
+    linkedList ans = {.head = NULL};
+    return ans;
 }
 
 //searches for an element in a linked list
