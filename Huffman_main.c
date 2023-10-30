@@ -72,12 +72,14 @@ FILE* HuffmanCompress(basicTree tree){
 */
 
 int main(){
+    /*
     hashTable h = readFile("li_def.txt");
     printf("\n");
     for (int i = 0; i < h.capacity; ++i){
         if (h.cells[i].head != NULL)
             printf("%s %i\n", h.cells[i].head->symbol, h.cells[i].head->weight);
     }
+    */
     
     /*int acc = 0;
     for (int i = 0; i < h.capacity; ++i) ++acc;
