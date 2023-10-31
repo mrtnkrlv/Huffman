@@ -43,15 +43,14 @@ void insert_huffmanHeap(huffmanHeap* heap, char* symbol, int weight){
     }
     else{
         int* int_buff1 = malloc(sizeof(int));
-        char* char_buff1 = malloc(strlen(p->heapSymbol));
 
+        char* char_buff1 = malloc(strlen(p->heapSymbol));
         while (p->heapLeft){
             *int_buff1 = p->heapWeight;
             strcpy(char_buff1, p->heapSymbol);
             p->heapSymbol = symbol;
             p->heapWeight = weight;
 
-            //check if the tree data are being updated correctly 
             p->heapTree->treeSymbol = symbol; 
             p->heapTree->treeWeight = weight;
             
@@ -66,7 +65,6 @@ void insert_huffmanHeap(huffmanHeap* heap, char* symbol, int weight){
         p->heapSymbol = char_buff1;
         p->heapWeight = *int_buff1;
 
-        //check if the tree data are being updated correctly 
         p->heapTree->treeSymbol = char_buff1; 
         p->heapTree->treeWeight = *int_buff1;
 
