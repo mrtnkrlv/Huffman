@@ -93,7 +93,7 @@ huffmanHeap extract_huffmanHeap(huffmanHeap* h){
 
 
 int main(){
-    basicTree t3 = {.treeSymbol = "c", .treeWeight = 4, .treeLeft = NULL, .treeRight = NULL};
+    /*basicTree t3 = {.treeSymbol = "c", .treeWeight = 4, .treeLeft = NULL, .treeRight = NULL};
     basicTree t2 = {.treeSymbol = "b", .treeWeight = 3, .treeLeft = NULL, .treeRight = NULL};
     basicTree t1 = {.treeSymbol = "a", .treeWeight = 1, .treeLeft = NULL, .treeRight = NULL};
 
@@ -109,7 +109,7 @@ int main(){
     printf("node 1: %s, %i\n", h.heapSymbol, h.heapWeight);
     printf("node 2: %s, %i\n", h.heapLeft->heapSymbol, h.heapLeft->heapWeight);
     //printf("node 3: %s, %i\n", h1.heapLeft->heapLeft->heapSymbol, h1.heapLeft->heapLeft->heapWeight);
-    //printf("node 4: %s, %i\n", h1.heapLeft->heapLeft->heapLeft->heapSymbol, h1.heapLeft->heapLeft->heapLeft->heapWeight);
+    //printf("node 4: %s, %i\n", h1.heapLeft->heapLeft->heapLeft->heapSymbol, h1.heapLeft->heapLeft->heapLeft->heapWeight);*/
 
 
 
