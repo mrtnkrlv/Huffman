@@ -3,13 +3,13 @@
 #include <string.h>
 #include <stdbool.h>
 #include <assert.h>
-#include "Huffman_heap.c"
+#include "Huffman_hashtable.c"
+//#include "Huffman_heap.c"
 
 // !!! NOTE TO SELF: the symbol of new nodes in priority queue !!!
 // !!! can be concatenation of symbols of children             !!!
 
-//function that returns size (in characters) of text file
-//actually returns 1 more than the "visible" file length (in characters)
+//function that returns size (in amount of characters) of text file
 
 int fileLength(char* fileName){
     FILE* p = fopen(fileName,"r");
@@ -33,7 +33,7 @@ hashTable readFile(char* fileName){
     hashTable* h = malloc(sizeof(hashTable));
     *h = creation_hashTable(fileLength(fileName));
     int c;
-    while ((c = fgetc(p)) != EOF){ // fix 
+    while ((c = fgetc(p)) != EOF){
         if (feof(p)) break;
         char* current = malloc(2);
         current[0] = c;
@@ -47,9 +47,7 @@ hashTable readFile(char* fileName){
     return *h;
 }
 
-/*
-
-//function to create Huffman tree based on heap input
+/*//function to create Huffman tree based on heap input
 
 basicTree create_HuffmanTree(huffmanHeap heap){
 
@@ -57,6 +55,7 @@ basicTree create_HuffmanTree(huffmanHeap heap){
 
 //function to go through Huffman tree and return "compressed" file
 //left: read a 1, right: read a 0
+
 FILE* HuffmanCompress(basicTree tree){
 
 }*/
@@ -75,6 +74,8 @@ int main(){
         }
     }
     printf("%i", sum);*/
+
+
 
     exit(0);
 }
