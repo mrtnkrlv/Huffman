@@ -4,7 +4,7 @@
 #include <stdbool.h>
 #include <assert.h>
 
-//tree structure (without internal tree)
+//binary tree structure (without internal tree)
 struct basicTree{
     char* treeSymbol;
     int treeWeight;
@@ -28,7 +28,6 @@ void insert_huffmanHeap(huffmanHeap* heap, char* symbol, int weight){
     huffmanHeap* p = malloc(sizeof(huffmanHeap));
     p = heap;
     while (p->heapWeight <= weight && p->heapLeft){
-        //printf("heap weight: %i     weight: %i \n", p->heapWeight, weight);
         p = p->heapLeft;
     }
     if (!p->heapLeft){
@@ -80,13 +79,21 @@ void insert_huffmanHeap(huffmanHeap* heap, char* symbol, int weight){
     }
 }
 
+//heap extraction function 
+huffmanHeap extract_huffmanHeap(huffmanHeap* h){
+    assert(h);
+    huffmanHeap* ans = malloc(sizeof(huffmanHeap));
+    ans = h->heapLeft;
+    return *ans;
+}
+
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 // Need balancing functions for heaps (right rotations)
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 
 int main(){
-    /*basicTree t3 = {.treeSymbol = "c", .treeWeight = 4, .treeLeft = NULL, .treeRight = NULL};
+    basicTree t3 = {.treeSymbol = "c", .treeWeight = 4, .treeLeft = NULL, .treeRight = NULL};
     basicTree t2 = {.treeSymbol = "b", .treeWeight = 3, .treeLeft = NULL, .treeRight = NULL};
     basicTree t1 = {.treeSymbol = "a", .treeWeight = 1, .treeLeft = NULL, .treeRight = NULL};
 
@@ -94,12 +101,15 @@ int main(){
     huffmanHeap h2 = {.heapSymbol = "b", .heapWeight = 3, .heapTree = &t2, .heapLeft = &h3, .heapRight = NULL};
     huffmanHeap h1 = {.heapSymbol = "a", .heapWeight = 1, .heapTree = &t1, .heapLeft = &h2, .heapRight = NULL};
         
-    insert_huffmanHeap(&h2, "d", 2);
+    huffmanHeap h = extract_huffmanHeap(&h1); 
 
-    printf("node 1: %s, %i\n", h1.heapSymbol, h1.heapWeight);
-    printf("node 2: %s, %i\n", h1.heapLeft->heapSymbol, h1.heapLeft->heapWeight);
-    printf("node 3: %s, %i\n", h1.heapLeft->heapLeft->heapSymbol, h1.heapLeft->heapLeft->heapWeight);
-    printf("node 4: %s, %i\n", h1.heapLeft->heapLeft->heapLeft->heapSymbol, h1.heapLeft->heapLeft->heapLeft->heapWeight);*/
+
+    //insert_huffmanHeap(&h2, "d", 2);
+
+    printf("node 1: %s, %i\n", h.heapSymbol, h.heapWeight);
+    printf("node 2: %s, %i\n", h.heapLeft->heapSymbol, h.heapLeft->heapWeight);
+    //printf("node 3: %s, %i\n", h1.heapLeft->heapLeft->heapSymbol, h1.heapLeft->heapLeft->heapWeight);
+    //printf("node 4: %s, %i\n", h1.heapLeft->heapLeft->heapLeft->heapSymbol, h1.heapLeft->heapLeft->heapLeft->heapWeight);
 
 
 
