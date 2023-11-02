@@ -105,11 +105,11 @@ basicTree huffmanTreeMake(char* fileName){
     return *h.heapTree; //never comes up
 }
 
-/*
-//function to go through Huffman tree and return "compressed" file
-//left: read a 1, right: read a 0
 
-FILE* HuffmanCompress(basicTree tree){
+//function to go through Huffman tree and return "compressed" file
+//left: read a 0, right: read a 1
+
+/*FILE* HuffmanCompress(basicTree tree){
 
 }*/
 
