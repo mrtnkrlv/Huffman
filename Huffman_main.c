@@ -4,7 +4,7 @@
 #include <stdbool.h>
 #include <assert.h>
 #include "Huffman_hashtable.c"
-//#include "Huffman_heap.c"
+#include "Huffman_heap.c"
 
 // !!! NOTE TO SELF: the symbol of new nodes in priority queue !!!
 // !!! can be concatenation of symbols of children             !!!
@@ -14,7 +14,7 @@
 int fileLength(char* fileName){
     FILE* p = fopen(fileName,"r");
     int acc = 0;
-    if (p == NULL){
+    if (!p){
         printf("File not found\n");
         return -1;
     }
@@ -25,27 +25,31 @@ int fileLength(char* fileName){
     return acc;
 }
 
-//function to read file, store in hashtable, and create initial heap
+//function to read file and create hashtable containing the file's characters
+//and their occurences
 
 hashTable readFile(char* fileName){
     FILE* p = fopen(fileName, "r");
     assert(p != NULL); 
-    hashTable* h = malloc(sizeof(hashTable));
-    *h = creation_hashTable(fileLength(fileName));
+    hashTable h = creation_hashTable(fileLength(fileName));
     int c;
     while ((c = fgetc(p)) != EOF){
+        printf("c %c\n", c);
         if (feof(p)) break;
         char* current = malloc(2);
         current[0] = c;
         current[1] = 0;
-        if (!presence_test_hashTable(*h,current))
-            insertion_hashTable(h,current);
-        increment_hashTable(h,current);
+        if (!presence_test_hashTable(h,current))
+            insertion_hashTable(&h,current);
+        increment_hashTable(&h,current);
     }
     fclose(p);
-
-    return *h;
+    return h;
 }
+
+//function to create Huffman heap based on a hashtable input
+
+
 
 /*//function to create Huffman tree based on heap input
 
@@ -63,18 +67,17 @@ FILE* HuffmanCompress(basicTree tree){
 // NEXT UP: decompression
 
 int main(){
-    /*int sum = 0;
-    hashTable h = readFile("li_def.txt");
+    /*hashTable h = readFile("li_def.txt");
+    int sum = 0;
     for (int i = 0; i < h.capacity; ++i){
-        node* p = h.cells[i].head;
-        while (p){
-            sum+=p->weight;
-            printf("%s %i\n", p->symbol, p->weight);
-            p = p->succ;
+        node* trav = h.cells[i].head;
+        while (trav){
+            sum+=trav->weight;
+            printf("%s %i\n", trav->symbol, trav->weight);
+            trav = trav->succ;
         }
     }
-    printf("%i", sum);*/
-
+    printf("sum: %i\n", sum);*/
 
 
     exit(0);

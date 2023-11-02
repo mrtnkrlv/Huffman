@@ -23,101 +23,107 @@ struct huffmanHeap{
 };
 typedef struct huffmanHeap huffmanHeap;
 
+//for insertion into an empty heap
+huffmanHeap create_huffmanHeap(char* symbol, int weight){
+    basicTree temp = {.treeSymbol = symbol, .treeWeight = weight, .treeLeft = NULL, .treeRight = NULL};
+    huffmanHeap ans = {.heapSymbol = symbol, .heapWeight = weight, .heapTree = &temp, .heapLeft = NULL, .heapRight = NULL};
+    return ans;
+}
+
 //heap insertion function
-void insert_huffmanHeap(huffmanHeap* heap, char* symbol, int weight){
-    huffmanHeap* p = malloc(sizeof(huffmanHeap));
-    p = heap;
-    while (p->heapWeight <= weight && p->heapLeft){
+void insert_huffmanHeap(huffmanHeap* h, char* symbol, int weight){
+    assert(h);
+    huffmanHeap* p = h;
+    while(p->heapWeight <= weight && p->heapLeft)
         p = p->heapLeft;
-    }
     if (!p->heapLeft){
-        huffmanHeap* temp = malloc(sizeof(huffmanHeap));
-        temp->heapLeft = NULL;
-        temp->heapRight = NULL;
-        basicTree t = {.treeSymbol = symbol, .treeWeight = weight, .treeLeft = NULL, .treeRight = NULL};
-        temp->heapTree = &t;
-        temp->heapSymbol = symbol;
-        temp->heapWeight = weight;
-        p->heapLeft = temp;
+        basicTree t = {
+            .treeSymbol = symbol,
+            .treeWeight = weight,
+            .treeLeft = NULL,
+            .treeRight = NULL
+        };
+        huffmanHeap* ins = malloc(sizeof(huffmanHeap));
+        huffmanHeap temp = {
+            .heapSymbol = symbol,
+            .heapWeight = weight,
+            .heapTree = &t,
+            .heapLeft = NULL,
+            .heapRight = NULL
+        };
+        *ins = temp;
+        p->heapLeft = ins;
     }
     else{
-        int* int_buff1 = malloc(sizeof(int));
+        //play around with pointers here if segfault in Huffman_main
+        int temp_int1 = weight, temp_int2;
+        char* temp_char1 = symbol;
+        char* temp_char2;
+        while(p->heapLeft){
+            //save 
+            temp_int2 = p->heapWeight;
+            temp_char2 = p->heapSymbol;
+            //change
+            p->heapWeight = temp_int1;
+            p->heapSymbol = temp_char1;
+            //exchange
+            temp_int1 = temp_int2;
+            temp_char1 = temp_char2;
 
-        char* char_buff1 = malloc(strlen(p->heapSymbol));
-        while (p->heapLeft){
-            *int_buff1 = p->heapWeight;
-            strcpy(char_buff1, p->heapSymbol);
-            p->heapSymbol = symbol;
-            p->heapWeight = weight;
-
-            p->heapTree->treeSymbol = symbol; 
-            p->heapTree->treeWeight = weight;
-            
             p = p->heapLeft;
         }
-        int* int_buff2 = malloc(sizeof(int));
-        char* char_buff2 = malloc(strlen(p->heapSymbol));
+        //play around with malloc-ing the temp_chars if segfault in Huffman_main
+        temp_int2 = p->heapWeight;
+        temp_char2 = p->heapSymbol;
+        p->heapWeight = temp_int1;
+        p->heapSymbol = temp_char1;
+        temp_int1 = temp_int2;
+        temp_char1 = temp_char2;
 
-        *int_buff2 = p->heapWeight;
-        strcpy(char_buff2, p->heapSymbol);
-
-        p->heapSymbol = char_buff1;
-        p->heapWeight = *int_buff1;
-
-        p->heapTree->treeSymbol = char_buff1; 
-        p->heapTree->treeWeight = *int_buff1;
-
-        basicTree t = {.treeSymbol = char_buff2, .treeWeight = *int_buff2, .treeLeft = NULL, .treeRight = NULL};
-        huffmanHeap* new = malloc(sizeof(heap));
-        new->heapSymbol = char_buff2;
-        new->heapWeight = *int_buff2;
-        new->heapTree = &t;
-        new->heapLeft = NULL;
-        new->heapRight = NULL;
-
-        p->heapLeft = new;
+        basicTree t = {
+            .treeSymbol = temp_char1,
+            .treeWeight = temp_int1,
+            .treeLeft = NULL,
+            .treeRight = NULL
+        };
+        huffmanHeap* ins = malloc(sizeof(huffmanHeap));
+        huffmanHeap temp = {
+            .heapSymbol = temp_char1,
+            .heapWeight = temp_int1,
+            .heapTree = &t,
+            .heapLeft = NULL,
+            .heapRight = NULL
+        };
+        *ins = temp;
+        p->heapLeft = ins;
     }
 }
 
-//heap extraction function 
-huffmanHeap extract_huffmanHeap(huffmanHeap* h){
-    assert(h);
-    huffmanHeap* ans = malloc(sizeof(huffmanHeap));
-    ans = h->heapLeft;
-    return *ans;
-}
+//heap extraction function (finish)
+/*huffmanHeap* extract_huffmanHeap(huffmanHeap h){
+    assert(&h);
+}*/
 
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 // Need balancing functions for heaps (right rotations)
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 
-int main(){
-    /*basicTree t3 = {.treeSymbol = "c", .treeWeight = 4, .treeLeft = NULL, .treeRight = NULL};
-    basicTree t2 = {.treeSymbol = "b", .treeWeight = 3, .treeLeft = NULL, .treeRight = NULL};
-    basicTree t1 = {.treeSymbol = "a", .treeWeight = 1, .treeLeft = NULL, .treeRight = NULL};
+/*int main(){
+    huffmanHeap h = create_huffmanHeap("a", 1);
+    insert_huffmanHeap(&h, "c", 2);
+    insert_huffmanHeap(&h, "d", 4);
+    insert_huffmanHeap(&h, "f", 5);
+    insert_huffmanHeap(&h, "e", 3);
+    insert_huffmanHeap(&h, "g", 0);
 
-    huffmanHeap h3 = {.heapSymbol = "c", .heapWeight = 4, .heapTree = &t3, .heapLeft = NULL, .heapRight = NULL};
-    huffmanHeap h2 = {.heapSymbol = "b", .heapWeight = 3, .heapTree = &t2, .heapLeft = &h3, .heapRight = NULL};
-    huffmanHeap h1 = {.heapSymbol = "a", .heapWeight = 1, .heapTree = &t1, .heapLeft = &h2, .heapRight = NULL};
-        
-    huffmanHeap h = extract_huffmanHeap(&h1); 
-
-
-    //insert_huffmanHeap(&h2, "d", 2);
-
-    printf("node 1: %s, %i\n", h.heapSymbol, h.heapWeight);
-    printf("node 2: %s, %i\n", h.heapLeft->heapSymbol, h.heapLeft->heapWeight);
-    //printf("node 3: %s, %i\n", h1.heapLeft->heapLeft->heapSymbol, h1.heapLeft->heapLeft->heapWeight);
-    //printf("node 4: %s, %i\n", h1.heapLeft->heapLeft->heapLeft->heapSymbol, h1.heapLeft->heapLeft->heapLeft->heapWeight);*/
-
-
+    printf("%s %i\n", h.heapSymbol, h.heapWeight);
+    printf("%s %i\n", h.heapLeft->heapSymbol, h.heapLeft->heapWeight);
+    printf("%s %i\n", h.heapLeft->heapLeft->heapSymbol, h.heapLeft->heapLeft->heapWeight);
+    printf("%s %i\n", h.heapLeft->heapLeft->heapLeft->heapSymbol, h.heapLeft->heapLeft->heapLeft->heapWeight);
+    printf("%s %i\n", h.heapLeft->heapLeft->heapLeft->heapLeft->heapSymbol, h.heapLeft->heapLeft->heapLeft->heapLeft->heapWeight);
+    printf("%s %i\n", h.heapLeft->heapLeft->heapLeft->heapLeft->heapLeft->heapSymbol, h.heapLeft->heapLeft->heapLeft->heapLeft->heapLeft->heapWeight);
 
     //exit for now so that I don't have to worry about freeing
     exit(0);
-}
-
-
-
-
-
+}*/

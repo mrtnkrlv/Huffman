@@ -30,9 +30,7 @@ hashTable creation_hashTable(int capacity){
         cells[i] = base; 
     }
     hashTable temp = {.cells = cells, .capacity = capacity};
-    hashTable* ans = malloc(sizeof(hashTable));
-    *ans = temp;
-    return *ans;
+    return temp;
 }
 
 //tests if a character is in a hashtable 
