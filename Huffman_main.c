@@ -4,7 +4,7 @@
 #include <stdbool.h>
 #include <assert.h>
 #include "Huffman_hashtable.c"
-#include "Huffman_heap.c"
+//#include "Huffman_heap.c"
 
 // !!! NOTE TO SELF: the symbol of new nodes in priority queue !!!
 // !!! can be concatenation of symbols of children             !!!
@@ -34,7 +34,7 @@ hashTable readFile(char* fileName){
     hashTable h = creation_hashTable(fileLength(fileName));
     int c;
     while ((c = fgetc(p)) != EOF){
-        printf("c %c\n", c);
+        //printf("c %c\n", c);
         if (feof(p)) break;
         char* current = malloc(2);
         current[0] = c;
@@ -49,14 +49,33 @@ hashTable readFile(char* fileName){
 
 //function to create Huffman heap based on a hashtable input
 
-
-
-/*//function to create Huffman tree based on heap input
-
-basicTree create_HuffmanTree(huffmanHeap heap){
-
+huffmanHeap heapMake(char* fileName){
+    hashTable h = readFile(fileName);
+    huffmanHeap* heap = malloc(sizeof(huffmanHeap));
+    bool tag = false;
+    for (int i = 0; i < h.capacity; ++i){
+        node* p = h.cells[i].head;
+        while(p){
+            if (!tag){
+                *heap = create_huffmanHeap(p->symbol, p->weight);
+                tag = true;
+            }
+            else
+                insert_huffmanHeap(heap, p->symbol, p->weight);
+            p = p->succ;
+        }
+    }
+    return *heap;
 }
 
+//function to create Huffman tree based on heap input
+
+/*basicTree treeMake(char* fileName){
+
+
+}*/
+
+/*
 //function to go through Huffman tree and return "compressed" file
 //left: read a 1, right: read a 0
 
@@ -78,6 +97,15 @@ int main(){
         }
     }
     printf("sum: %i\n", sum);*/
+
+    huffmanHeap h = heapMake("li_def.txt");
+    huffmanHeap* p = &h;
+
+    while (p){
+        printf("%s %i\n", p->heapTree->treeSymbol, p->heapTree->treeWeight);
+        p = p->heapLeft;
+    }
+
 
 
     exit(0);
