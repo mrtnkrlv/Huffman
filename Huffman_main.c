@@ -3,14 +3,13 @@
 #include <string.h>
 #include <stdbool.h>
 #include <assert.h>
-#include "Huffman_hashtable.c"
-//#include "Huffman_heap.c"
+//#include "Huffman_hashtable.c"
+#include "Huffman_heap.c"
 
 // !!! NOTE TO SELF: the symbol of new nodes in priority queue !!!
 // !!! can be concatenation of symbols of children             !!!
 
 //function that returns size (in amount of characters) of text file
-
 int fileLength(char* fileName){
     FILE* p = fopen(fileName,"r");
     int acc = 0;
@@ -27,16 +26,14 @@ int fileLength(char* fileName){
 
 //function to read file and create hashtable containing the file's characters
 //and their occurences
-
 hashTable readFile(char* fileName){
     FILE* p = fopen(fileName, "r");
     assert(p != NULL); 
     hashTable h = creation_hashTable(fileLength(fileName));
     int c;
     while ((c = fgetc(p)) != EOF){
-        //printf("c %c\n", c);
         if (feof(p)) break;
-        char* current = malloc(2);
+        char* current = malloc(2); //look into whether I should free here or not
         current[0] = c;
         current[1] = 0;
         if (!presence_test_hashTable(h,current))
@@ -48,7 +45,6 @@ hashTable readFile(char* fileName){
 }
 
 //function to create Huffman heap based on a hashtable input
-
 huffmanHeap heapMake(char* fileName){
     hashTable h = readFile(fileName);
     huffmanHeap* heap = malloc(sizeof(huffmanHeap));
@@ -69,11 +65,31 @@ huffmanHeap heapMake(char* fileName){
 }
 
 //function to create Huffman tree based on heap input
+basicTree treeMake(char* fileName){
+    huffmanHeap h = heapMake(fileName);
+    if (!h.heapLeft){
+        return *h.heapTree;
+    }
+    while (h.heapLeft){
+        basicTree* leftChild = malloc(sizeof(basicTree));
+        basicTree* rightChild = malloc(sizeof(basicTree));
+        basicTree* new = malloc(sizeof(basicTree));
 
-/*basicTree treeMake(char* fileName){
+        *leftChild = extract_huffmanHeap(&h);
+        *rightChild = extract_huffmanHeap(&h);
 
+        basicTree t = {
+            //.treeSymbol = ,
+            .treeWeight = leftChild->treeWeight + rightChild->treeWeight,
+            .treeLeft = leftChild,
+            .treeRight = rightChild
+        };
+ 
+        *new = t;
 
-}*/
+    }
+
+}
 
 /*
 //function to go through Huffman tree and return "compressed" file
@@ -85,7 +101,7 @@ FILE* HuffmanCompress(basicTree tree){
 
 // NEXT UP: decompression
 
-int main(){
+/*int main(){
     /*hashTable h = readFile("li_def.txt");
     int sum = 0;
     for (int i = 0; i < h.capacity; ++i){
@@ -98,16 +114,18 @@ int main(){
     }
     printf("sum: %i\n", sum);*/
 
-    huffmanHeap h = heapMake("li_def.txt");
+    /*huffmanHeap h = heapMake("li_def.txt");
     huffmanHeap* p = &h;
 
     while (p){
         printf("%s %i\n", p->heapTree->treeSymbol, p->heapTree->treeWeight);
         p = p->heapLeft;
-    }
+    }*/
 
 
 
     exit(0);
-}
+}*/
+
+
 

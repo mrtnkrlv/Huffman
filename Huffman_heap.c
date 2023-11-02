@@ -25,9 +25,10 @@ typedef struct huffmanHeap huffmanHeap;
 
 //for insertion into an empty heap
 huffmanHeap create_huffmanHeap(char* symbol, int weight){
+    basicTree* pt = malloc(sizeof(basicTree));
     basicTree t = {.treeSymbol = symbol, .treeWeight = weight, .treeLeft = NULL, .treeRight = NULL};
-    *pTree = t;
-    huffmanHeap ans = {.heapSymbol = symbol, .heapWeight = weight, .heapTree = pTree, .heapLeft = NULL, .heapRight = NULL};
+    *pt = t;
+    huffmanHeap ans = {.heapSymbol = symbol, .heapWeight = weight, .heapTree = pt, .heapLeft = NULL, .heapRight = NULL};
     return ans;
 }
 
@@ -38,19 +39,19 @@ void insert_huffmanHeap(huffmanHeap* h, char* symbol, int weight){
     while(p->heapWeight <= weight && p->heapLeft)
         p = p->heapLeft;
     if (!p->heapLeft){
-        basicTree* pTree = malloc(sizeof(basicTree));
+        basicTree* pt = malloc(sizeof(basicTree));
         basicTree t = {
             .treeSymbol = symbol,
             .treeWeight = weight,
             .treeLeft = NULL,
             .treeRight = NULL
         };
-        *pTree = t;
+        *pt = t;
         huffmanHeap* ins = malloc(sizeof(huffmanHeap));
         huffmanHeap temp = {
             .heapSymbol = symbol,
             .heapWeight = weight,
-            .heapTree = pTree,
+            .heapTree = pt,
             .heapLeft = NULL,
             .heapRight = NULL
         };
@@ -69,6 +70,9 @@ void insert_huffmanHeap(huffmanHeap* h, char* symbol, int weight){
             //change
             p->heapWeight = temp_int1;
             p->heapSymbol = temp_char1;
+            //change tree
+            p->heapTree->treeWeight = temp_int1;
+            p->heapTree->treeSymbol = temp_char1;
             //exchange
             temp_int1 = temp_int2;
             temp_char1 = temp_char2;
@@ -80,20 +84,26 @@ void insert_huffmanHeap(huffmanHeap* h, char* symbol, int weight){
         temp_char2 = p->heapSymbol;
         p->heapWeight = temp_int1;
         p->heapSymbol = temp_char1;
+
+        p->heapTree->treeWeight = temp_int1;
+        p->heapTree->treeSymbol = temp_char1;
+
         temp_int1 = temp_int2;
         temp_char1 = temp_char2;
 
+        basicTree* pt = malloc(sizeof(basicTree));
         basicTree t = {
             .treeSymbol = temp_char1,
             .treeWeight = temp_int1,
             .treeLeft = NULL,
             .treeRight = NULL
         };
+        *pt = t;
         huffmanHeap* ins = malloc(sizeof(huffmanHeap));
         huffmanHeap temp = {
             .heapSymbol = temp_char1,
             .heapWeight = temp_int1,
-            .heapTree = &t,
+            .heapTree = pt,
             .heapLeft = NULL,
             .heapRight = NULL
         };
@@ -102,30 +112,76 @@ void insert_huffmanHeap(huffmanHeap* h, char* symbol, int weight){
     }
 }
 
-//heap extraction function (finish)
-/*huffmanHeap* extract_huffmanHeap(huffmanHeap h){
+//heap tree insertion function 
+void insert_tree_huffmanHeap(huffmanHeap* h, basicTree t){
+    insert_huffmanHeap(h, t.treeSymbol, t.treeWeight);
+    huffmanHeap* p = h;
+    while (true){
+        if (!strcmp(p->heapSymbol, t.treeSymbol)){
+            *p->heapTree = t;
+            return;
+        }
+        p = p->heapLeft;
+    }
+}
+
+//heap extraction function: returns a tree for easier
+//Huffman tree creation in Huffmain_main
+basicTree extract_huffmanHeap(huffmanHeap* h){
     assert(&h);
-}*/
+    basicTree t = *h->heapTree;
+    *h = *h->heapLeft; //stupid but OK for now
+    return t;
+}
 
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 // Need balancing functions for heaps (right rotations)
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 
-int main(){
+/*int main(){
     huffmanHeap h = create_huffmanHeap("a", 1);
-    insert_huffmanHeap(&h, "c", 2);
-    /*insert_huffmanHeap(&h, "d", 4);
-    insert_huffmanHeap(&h, "f", 5);
+    insert_huffmanHeap(&h, "b", 2);
+    insert_huffmanHeap(&h, "c", 4);
+    insert_huffmanHeap(&h, "d", 5);
     insert_huffmanHeap(&h, "e", 3);
-    insert_huffmanHeap(&h, "g", 0);*/
+    insert_huffmanHeap(&h, "f", 0);
+
+    basicTree t2 = {
+        .treeSymbol = "b",
+        .treeWeight = 3,
+        .treeLeft = NULL,
+        .treeRight = NULL
+    };
+    basicTree t1 = {
+        .treeSymbol = "z",
+        .treeWeight = -1,
+        .treeLeft = NULL,
+        .treeRight = &t2
+    };
+
+    insert_tree_huffmanHeap(&h, t1);
+
+
+    //basicTree t = extract_huffmanHeap(&h);
+    //printf("tree %s %i\n", t.treeSymbol, t.treeWeight);
 
     huffmanHeap* p = &h;
     while (p){
-        printf("%s %i\n", h.heapSymbol, h.heapWeight);
+        basicTree* t = p->heapTree;
+        int sum = 0;
+        while(t){
+            ++sum;
+            printf("%s %i\n", t->treeSymbol, t->treeWeight);
+            printf("sum %i\n", sum);
+            t = t->treeRight;
+        }
+        sum = 0;
         p = p->heapLeft;
     }
+
+
     
     //exit for now so that I don't have to worry about freeing
     exit(0);
-}
+}*/
