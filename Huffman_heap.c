@@ -90,7 +90,6 @@ void insert_huffmanHeap(huffmanHeap* h, char* symbol, int weight){
         }
     }
     else{
-        //play around with pointers here if segfault in Huffman_main
         int temp_int1 = weight, temp_int2;
         char* temp_char1 = symbol;
         char* temp_char2;
@@ -110,7 +109,6 @@ void insert_huffmanHeap(huffmanHeap* h, char* symbol, int weight){
 
             p = p->heapLeft;
         }
-        //play around with malloc-ing the temp_chars if segfault in Huffman_main
         temp_int2 = p->heapWeight;
         temp_char2 = p->heapSymbol;
         

@@ -5,6 +5,7 @@
 #include <assert.h>
 #include "Huffman_hashtable.c"
 #include "Huffman_heap.c"
+#include "Huffman_buffers.c"
 
 // !!! NOTE TO SELF: the symbol of new nodes in priority queue !!!
 // !!! can be concatenation of symbols of children             !!!
@@ -145,10 +146,10 @@ hashTable hashtableCodes(char* fileName){
     //go through file char by char and insert (char, char_code) in h
     char c;
     while ((c = fgetc(p)) != EOF){
+        if (feof(p)) break;
         char* ins = malloc(2);
         ins[0] = c;
         ins[1] = 0;
-        if (feof(p)) break;
         if (!presence_test_hashTable(h, ins))
             insertion_hashTable(&h, ins);
         modify_hashTable(&h,ins,charCode(t,ins));
@@ -157,11 +158,34 @@ hashTable hashtableCodes(char* fileName){
 }
 
 //function to go through Huffman tree and create "compressed" file
-//left: read a 0, right: read a 1
+void huffmanCompress(char* fileName){
+    FILE* out = fopen(fileName, "r");
+    FILE* in = fopen("compressed.bin", "wb");
+    hashTable h = hashtableCodes(fileName);
+    int buffer = 0, fullness = 0;
+    char c;
+    while ((c = fgetc(out)) != EOF){
+        if (feof(out)) break;
+        char* temp = malloc(2);
+        temp[0] = c;
+        temp[1] = 0;
 
-/*FILE* HuffmanCompress(basicTree tree){
-
-}*/
+        node* trav = h.cells[hashFunction(temp, h.capacity)].head;
+        while (strcmp(trav->symbol, temp))
+            trav = trav->succ;
+        int intCode = trav->weight;
+        char* code = itoa(intCode);
+        //printf("code %s\n", code);
+        write_byte(in, code, &buffer, &fullness);
+    }
+    if (fullness > 0){
+        fputc(buffer, in);
+        fullness = 0;
+        buffer = 0;
+    }
+    fclose(out);
+    fclose(in);
+}
 
 // NEXT UP: decompression
 
@@ -193,19 +217,21 @@ int main(){
         p = p->heapLeft;
     }*/
 
-    basicTree t = huffmanTreeMake("def.txt");
+    //basicTree t = huffmanTreeMake("def.txt");
     //dfsPrint(t);
 
     //printf("%i\n", charCode(t,"E"));
 
-    hashTable h = hashtableCodes("def.txt");
+    /*hashTable h = hashtableCodes("def.txt");
     for (int i = 0; i < h.capacity; ++i){
         node* p = h.cells[i].head;
         while (p){
             printf("%s %i\n", p->symbol, p->weight);
             p = p->succ;
         }
-    }
+    }*/
+
+    huffmanCompress("def.txt");
 
     exit(0);
 }
