@@ -105,8 +105,58 @@ basicTree huffmanTreeMake(char* fileName){
     return *h.heapTree; //never comes up
 }
 
+//function to test whether a char array is in a basic tree
+bool search_char_tree(basicTree t, char* c){
+    bool acc = !strcmp(t.treeSymbol, c);
+    //printf("%i\n", acc);
+    if (t.treeLeft) acc = acc || search_char_tree(*t.treeLeft, c);
+    if(t.treeRight) acc = acc || search_char_tree(*t.treeRight, c);
+    return acc;
+}
 
-//function to go through Huffman tree and return "compressed" file
+//depth-first search for next function
+void charCode_traverse(basicTree huffmanTree, char* c, int* rep){
+    if (huffmanTree.treeLeft && search_char_tree(*huffmanTree.treeLeft,c)){
+        *rep*=10;
+        charCode_traverse(*huffmanTree.treeLeft,c,rep);
+    }
+    if (huffmanTree.treeRight && search_char_tree(*huffmanTree.treeRight,c)){
+        *rep = *rep*10+1;
+        charCode_traverse(*huffmanTree.treeRight,c,rep);
+    }
+}
+
+//function to return code (as an int) corresponding to a character for compression
+// !!! adds an extra 2 in front !!!
+int charCode(basicTree huffmanTree, char* c){
+    //iteratively, go through the tree and test if c is in left or right subtree
+    //add a 0 when you go left and a 1 when you go right
+    assert(search_char_tree(huffmanTree,c));
+    int rep = 2;
+    charCode_traverse(huffmanTree,c,&rep);
+    return rep;
+}
+
+//function to return hashtable containing codes for compression
+hashTable hashtableCodes(char* fileName){
+    basicTree t = huffmanTreeMake(fileName);
+    hashTable h = creation_hashTable(fileLength(fileName));
+    FILE* p = fopen(fileName, "r");
+    //go through file char by char and insert (char, char_code) in h
+    char c;
+    while ((c = fgetc(p)) != EOF){
+        char* ins = malloc(2);
+        ins[0] = c;
+        ins[1] = 0;
+        if (feof(p)) break;
+        if (!presence_test_hashTable(h, ins))
+            insertion_hashTable(&h, ins);
+        modify_hashTable(&h,ins,charCode(t,ins));
+    }
+    return h;
+}
+
+//function to go through Huffman tree and create "compressed" file
 //left: read a 0, right: read a 1
 
 /*FILE* HuffmanCompress(basicTree tree){
@@ -143,8 +193,19 @@ int main(){
         p = p->heapLeft;
     }*/
 
-    //basicTree t = huffmanTreeMake("def.txt");
+    basicTree t = huffmanTreeMake("def.txt");
     //dfsPrint(t);
+
+    //printf("%i\n", charCode(t,"E"));
+
+    hashTable h = hashtableCodes("def.txt");
+    for (int i = 0; i < h.capacity; ++i){
+        node* p = h.cells[i].head;
+        while (p){
+            printf("%s %i\n", p->symbol, p->weight);
+            p = p->succ;
+        }
+    }
 
     exit(0);
 }

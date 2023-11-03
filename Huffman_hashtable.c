@@ -52,8 +52,7 @@ void insertion_hashTable(hashTable* h, char* s){
     insertion_linkedList(&h->cells[hashFunction(s,h->capacity)], ins);
 }
 
-//increments value at key s: no need for a value modification function
-//because I'll only change values that I don't know about when making heaps
+//increments value at key s
 void increment_hashTable(hashTable* h, char* s){
     assert(presence_test_hashTable(*h,s));
     node* mod = h->cells[hashFunction(s,h->capacity)].head;
@@ -61,6 +60,14 @@ void increment_hashTable(hashTable* h, char* s){
         mod = mod->succ;
     int* temp = malloc(sizeof(int));
     ++mod->weight;
+}
+
+void modify_hashTable(hashTable* h, char* s, int n){
+    assert(presence_test_hashTable(*h, s));
+    node* p = h->cells[hashFunction(s,h->capacity)].head;
+    while (strcmp(p->symbol,s))
+        p = p->succ;
+    p->weight = n;
 }
 
 /*int main(){
