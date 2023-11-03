@@ -143,8 +143,8 @@ int main(){
         p = p->heapLeft;
     }*/
 
-    basicTree t = huffmanTreeMake("def.txt");
-    dfsPrint(t);
+    //basicTree t = huffmanTreeMake("def.txt");
+    //dfsPrint(t);
 
     exit(0);
 }
