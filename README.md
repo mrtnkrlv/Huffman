@@ -1,5 +1,5 @@
 # Huffman
-Files to perform Huffman compression and decompression using a priority queue algorithm based on a min-heap structure.
+Files to perform Huffman compression and decompression using a priority queue algorithm based on a min-heap structure (school project).
 
 The included files are: 
 - a linked list library
@@ -17,3 +17,5 @@ compressed (binary) file, due to time constraints. Otherwise, the code works as 
 At the moment, no special functions to free allocated memory during the execution of the project's various functions have been
 created for simplicity's sake: the exit() function used in the Huffmain_main file's main() function serves that purpose. Users
 are free to create their own functions as they see fit.
+
+The Hex Editor extension on Visual Studio Code is recommended to users who wish to see the binary code of a compressed file.
