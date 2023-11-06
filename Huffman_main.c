@@ -111,11 +111,11 @@ bool search_char_tree(basicTree t, char* c){
     bool acc = !strcmp(t.treeSymbol, c);
     //printf("%i\n", acc);
     if (t.treeLeft) acc = acc || search_char_tree(*t.treeLeft, c);
-    if(t.treeRight) acc = acc || search_char_tree(*t.treeRight, c);
+    if (t.treeRight) acc = acc || search_char_tree(*t.treeRight, c);
     return acc;
 }
 
-//depth-first search for next function
+//depth-first search
 void charCode_traverse(basicTree huffmanTree, char* c, int* rep){
     if (huffmanTree.treeLeft && search_char_tree(*huffmanTree.treeLeft,c)){
         *rep*=10;
@@ -187,7 +187,56 @@ void huffmanCompress(char* fileName){
     fclose(in);
 }
 
-// NEXT UP: decompression
+//function to go through compressed Huffman file and return a decompressed version of the file
+void huffmanDecompress(char* compressed, char* origin){
+
+    FILE* in = fopen(compressed, "rb");
+    FILE* out = fopen("decompressed.txt", "w");
+    basicTree* t;
+    *t = huffmanTreeMake(origin);
+    //buffer
+    char* buffer = malloc(2);
+    buffer[1] = 0;
+    //len
+    int len = findSize("compressed.bin")*8;
+    //ans
+    char* ans = malloc(len+1);
+    ans[len] = 0;
+
+    int acc = 7;
+    fread(buffer,1,1,in);
+    while (acc < len){
+        int temp = acc;
+        int trav = 0;
+        //int sum = 0;
+        for (int i = temp - 7; i < temp+1; ++i){
+            //printf("%i\n", temp-trav);
+            ans[temp-trav] = (*buffer & 1) + '0';
+            *buffer = *buffer >> 1;
+            ++trav;
+            //if (!(sum%8)) printf(" ");
+        }
+        acc+=8;
+        fread(buffer,1,1,in);
+    }
+    //store the bit stram into a char array
+    printf("%s\n", ans);
+    int trav = 0;
+    while (trav < len-3){
+        while (t->treeLeft || t->treeRight){
+            if (ans[trav] == '1')
+                t = t->treeRight;
+            else
+                t = t->treeLeft;
+            ++trav;
+            printf("%i\n", t->treeWeight);
+        }
+        fputs(t->treeSymbol, out);
+        *t = huffmanTreeMake(origin);
+    }
+    fclose(in);
+    fclose(out);
+}
 
 //depth-first traversal of a tree
 void dfsPrint(basicTree t){
@@ -232,6 +281,7 @@ int main(){
     }*/
 
     huffmanCompress("def.txt");
+    huffmanDecompress("compressed.bin", "def.txt");
 
     exit(0);
 }

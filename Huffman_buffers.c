@@ -46,8 +46,29 @@ void write_byte(FILE* p, char* code, int* buffer, int* fullness){
     }
 }
 
-//function to read a byte from a file and write the corresponding code in another file
+//function to return the length of text file in bytes
+long int findSize(char* fileName){ 
+    FILE* fp = fopen(fileName, "rb");
+    if (fp == NULL) { 
+        printf("File Not Found!\n"); 
+        return -1; 
+    } 
+    fseek(fp, 0L, SEEK_END);
+    long int res = ftell(fp); 
+    fclose(fp);
+    return res; 
+} 
 
+//function to reverse a char array
+char* strrev(char* s){
+    int len = strlen(s);
+    char* ans = malloc(len+1);
+    ans[len] = 0;
+    for (int i = 0; i < len; ++i){
+        ans[i] = s[len-1-i];
+    }
+    return ans;
+}
 
 /*int main(){
     FILE* p = fopen("test.bin", "wb");
