@@ -169,13 +169,11 @@ void huffmanCompress(char* fileName){
         char* temp = malloc(2);
         temp[0] = c;
         temp[1] = 0;
-
         node* trav = h.cells[hashFunction(temp, h.capacity)].head;
         while (strcmp(trav->symbol, temp))
             trav = trav->succ;
         int intCode = trav->weight;
-        char* code = itoa(intCode);
-        //printf("code %s\n", code);
+        char* code = itoa(intCode); 
         write_byte(in, code, &buffer, &fullness);
     }
     if (fullness > 0){
@@ -189,38 +187,28 @@ void huffmanCompress(char* fileName){
 
 //function to go through compressed Huffman file and return a decompressed version of the file
 void huffmanDecompress(char* compressed, char* origin){
-
     FILE* in = fopen(compressed, "rb");
     FILE* out = fopen("decompressed.txt", "w");
     basicTree* t;
     *t = huffmanTreeMake(origin);
-    //buffer
     char* buffer = malloc(2);
     buffer[1] = 0;
-    //len
     int len = findSize("compressed.bin")*8;
-    //ans
     char* ans = malloc(len+1);
     ans[len] = 0;
-
     int acc = 7;
     fread(buffer,1,1,in);
     while (acc < len){
         int temp = acc;
         int trav = 0;
-        //int sum = 0;
         for (int i = temp - 7; i < temp+1; ++i){
-            //printf("%i\n", temp-trav);
             ans[temp-trav] = (*buffer & 1) + '0';
             *buffer = *buffer >> 1;
             ++trav;
-            //if (!(sum%8)) printf(" ");
         }
         acc+=8;
         fread(buffer,1,1,in);
     }
-    //store the bit stram into a char array
-    printf("%s\n", ans);
     int trav = 0;
     while (trav < len-3){
         while (t->treeLeft || t->treeRight){
@@ -229,7 +217,6 @@ void huffmanDecompress(char* compressed, char* origin){
             else
                 t = t->treeLeft;
             ++trav;
-            printf("%i\n", t->treeWeight);
         }
         fputs(t->treeSymbol, out);
         *t = huffmanTreeMake(origin);
