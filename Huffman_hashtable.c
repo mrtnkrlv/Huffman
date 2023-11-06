@@ -62,6 +62,7 @@ void increment_hashTable(hashTable* h, char* s){
     ++mod->weight;
 }
 
+//modifies the value of a hashtable at key s
 void modify_hashTable(hashTable* h, char* s, int n){
     assert(presence_test_hashTable(*h, s));
     node* p = h->cells[hashFunction(s,h->capacity)].head;
@@ -69,9 +70,3 @@ void modify_hashTable(hashTable* h, char* s, int n){
         p = p->succ;
     p->weight = n;
 }
-
-/*int main(){
-
-    //exit for now so that I don't have to worry about freeing
-    exit(0);
-}*/

@@ -56,9 +56,3 @@ void print_linkedList(linkedList l){
         p = p->succ;
     }
 }
-
-/*int main(){
-
-    //exit for now so that I don't have to worry about freeing
-    exit(0);
-}*/

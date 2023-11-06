@@ -160,49 +160,6 @@ void insert_tree_huffmanHeap(huffmanHeap* h, basicTree t){
 basicTree extract_huffmanHeap(huffmanHeap* h){
     assert(&h);
     basicTree t = *h->heapTree;
-    *h = *h->heapLeft; //stupid but OK for now
+    *h = *h->heapLeft; //OK for now
     return t;
 }
-
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// Need balancing functions for heaps (right rotations)
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-
-/*int main(){
-    huffmanHeap h = create_huffmanHeap("a", 1);
-    insert_huffmanHeap(&h, "b", 3);
-    insert_huffmanHeap(&h, "c", 2); 
-    insert_huffmanHeap(&h, "d", 5); 
-    insert_huffmanHeap(&h, "e", 3);
-    insert_huffmanHeap(&h, "f", 6);
-
-    basicTree t2 = {
-        .treeSymbol = "b",
-        .treeWeight = 3,
-        .treeLeft = NULL,
-        .treeRight = NULL
-    };
-    basicTree t1 = {
-        .treeSymbol = "z",
-        .treeWeight = -1,
-        .treeLeft = NULL,
-        .treeRight = &t2
-    };
-
-    //insert_tree_huffmanHeap(&h, t1);
-
-
-    //basicTree t = extract_huffmanHeap(&h);
-    //printf("tree %s %i\n", t.treeSymbol, t.treeWeight);
-
-    huffmanHeap* p = &h;
-    while (p){
-        printf("%s %i\n", p->heapSymbol, p->heapWeight);
-        p = p->heapLeft;
-    }
-
-    
-    //exit for now so that I don't have to worry about freeing
-    exit(0);
-}*/

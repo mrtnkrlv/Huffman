@@ -7,9 +7,6 @@
 #include "Huffman_heap.c"
 #include "Huffman_buffers.c"
 
-// !!! NOTE TO SELF: the symbol of new nodes in priority queue !!!
-// !!! can be concatenation of symbols of children             !!!
-
 //function that returns size (in amount of characters) of text file
 int fileLength(char* fileName){
     FILE* p = fopen(fileName,"r");
@@ -34,7 +31,7 @@ hashTable readFile(char* fileName){
     int c;
     while ((c = fgetc(p)) != EOF){
         if (feof(p)) break;
-        char* current = malloc(2); //look into whether I should free here or not
+        char* current = malloc(2);
         current[0] = c;
         current[1] = 0;
         if (!presence_test_hashTable(h,current))
@@ -109,13 +106,12 @@ basicTree huffmanTreeMake(char* fileName){
 //function to test whether a char array is in a basic tree
 bool search_char_tree(basicTree t, char* c){
     bool acc = !strcmp(t.treeSymbol, c);
-    //printf("%i\n", acc);
     if (t.treeLeft) acc = acc || search_char_tree(*t.treeLeft, c);
     if (t.treeRight) acc = acc || search_char_tree(*t.treeRight, c);
     return acc;
 }
 
-//depth-first search
+//depth-first search to get code
 void charCode_traverse(basicTree huffmanTree, char* c, int* rep){
     if (huffmanTree.treeLeft && search_char_tree(*huffmanTree.treeLeft,c)){
         *rep*=10;
@@ -130,8 +126,6 @@ void charCode_traverse(basicTree huffmanTree, char* c, int* rep){
 //function to return code (as an int) corresponding to a character for compression
 // !!! adds an extra 2 in front !!!
 int charCode(basicTree huffmanTree, char* c){
-    //iteratively, go through the tree and test if c is in left or right subtree
-    //add a 0 when you go left and a 1 when you go right
     assert(search_char_tree(huffmanTree,c));
     int rep = 2;
     charCode_traverse(huffmanTree,c,&rep);
@@ -143,7 +137,6 @@ hashTable hashtableCodes(char* fileName){
     basicTree t = huffmanTreeMake(fileName);
     hashTable h = creation_hashTable(fileLength(fileName));
     FILE* p = fopen(fileName, "r");
-    //go through file char by char and insert (char, char_code) in h
     char c;
     while ((c = fgetc(p)) != EOF){
         if (feof(p)) break;
@@ -233,42 +226,7 @@ void dfsPrint(basicTree t){
 }
 
 int main(){
-    /*hashTable h = readFile("li_def.txt");
-    int sum = 0;
-    for (int i = 0; i < h.capacity; ++i){
-        node* trav = h.cells[i].head;
-        while (trav){
-            sum+=trav->weight;
-            printf("%s %i\n", trav->symbol, trav->weight);
-            trav = trav->succ;
-        }
-    }
-    printf("sum: %i\n", sum);*/
 
-    //huffmanHeap h = heapMake("def.txt");
-    //huffmanHeap* p = &h;
-
-    /*while (p){
-        printf("%s %i\n", p->heapTree->treeSymbol, p->heapTree->treeWeight);
-        p = p->heapLeft;
-    }*/
-
-    //basicTree t = huffmanTreeMake("def.txt");
-    //dfsPrint(t);
-
-    //printf("%i\n", charCode(t,"E"));
-
-    /*hashTable h = hashtableCodes("def.txt");
-    for (int i = 0; i < h.capacity; ++i){
-        node* p = h.cells[i].head;
-        while (p){
-            printf("%s %i\n", p->symbol, p->weight);
-            p = p->succ;
-        }
-    }*/
-
-    huffmanCompress("def.txt");
-    huffmanDecompress("compressed.bin", "def.txt");
 
     exit(0);
 }

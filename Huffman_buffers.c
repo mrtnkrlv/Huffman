@@ -69,14 +69,3 @@ char* strrev(char* s){
     }
     return ans;
 }
-
-/*int main(){
-    FILE* p = fopen("test.bin", "wb");
-    char* code = "10011010";
-    int buffer = 0;
-    int fullness = 0;
-    write_byte(p, code, &buffer, &fullness);
-    fclose(p);
-
-    exit(0);
-}*/
