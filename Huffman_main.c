@@ -226,7 +226,7 @@ void dfsPrint(basicTree t){
 }
 
 int main(){
-
+    huffmanCompress("test.txt");
 
     exit(0);
 }
